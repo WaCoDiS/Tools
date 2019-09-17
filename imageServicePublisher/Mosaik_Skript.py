@@ -78,7 +78,7 @@ try:
         arcpy.SetMosaicDatasetProperties_management(
                 workspace_gdb+"\\" + collection_id + '.gdb\\' "Master" + '_' + collection_id,
                 use_time="ENABLED", start_time_field="year_quat", end_time_field="year_quat",
-                time_format="YYYY-MM", time_interval_units="Months")
+                time_format="YYYYMMDD", time_interval_units="Months")
         print "Mosaic Properties were set"
 except arcpy.ExecuteError:
     e = sys.exc_info()[1]
@@ -100,7 +100,7 @@ def getYearQuat(date,dat):
 try:
     # Create MosaicDataset for every processed Rasterproduct
     # Add the belonging Rasterfile(TIF) to the created MosaicDataset
-    mosaic_dataset_name = "T" + product_name[:len(product_name)-4]+'_Mosaic'
+    mosaic_dataset_name = "T_" + product_name[:len(product_name)-4]+'_Mosaic'
     mosaic_product_name = mosaic_dataset_name.replace("-", "_")
     # Process: Mosaik-Dataset erstellen
     gdb_ws_name = collection_id + '.gdb'
@@ -131,7 +131,7 @@ try:
         #                                    "INSERT", "C:/workspace/hillshade.rft.xml", "Rendering Function")
         print "Added Raster to MasterMosaic"
         arcpy.CalculateField_management(workspace_gdb+"\\"+gdb_ws_name + '\\' + 'Master' + "_" + collection_id, "year_quat",
-                                        "getYearQuat(!NAME!.split('_')[0],!NAME!.split('_')[0])",
+                                        "getYearQuat(!NAME!.split('_')[1],!NAME!.split('_')[1])",
                                         "PYTHON", codeblock)
         print "Calculated Fields for " + collection_id
                     # To DO mark processed datasets and save to another directory
