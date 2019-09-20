@@ -15,9 +15,10 @@
 # 4. name of service Ags File for all Services: Default:wacodisService.ags
 # 5. outdirServerConFolder -->  Path to save server connection file and registered folder for reference Data
 # 
-# Following variables are defined throughout the console:
-# product_results ("Connection to Folder containing TIF DataResultProducts") MUST BE DEFINED
-# collection-id  Id of processed Dataproduct
+# Following variables are passed as command line arguments:
+# IMAGE ("Absolute path to TIF DataResultProducts") MUST BE DEFINED
+# COLLECTION Id of processed Dataproduct
+# Usage: Mosaik_Skript.py [-h] <IMAGE> <COLLECTION>
 # ---------------------------------------------------------------------------
 import argparse
 
