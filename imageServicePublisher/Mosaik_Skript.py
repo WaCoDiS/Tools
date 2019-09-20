@@ -160,24 +160,34 @@ except arcpy.ExecuteError:
     print arcpy.GetMessages() + "\n\n"
     sys.exit("Errors in analyzing Mosaic Dataset")
 
-# If Image Service does not Exist create server Connection and Service drafts to publih the service
+# Create an ArcGIS Server connection if not already established
+try:
+    if not arcpy.Exists(out_folder_path+"\\"+out_name):
+        print "Creating Server Connection File"
+        arcpy.mapping.CreateGISServerConnectionFile("PUBLISH_GIS_SERVICES",
+                                            out_folder_path,
+                                            out_name,
+                                            server_url,
+                                            "ARCGIS_SERVER",
+                                            use_arcgis_desktop_staging_folder,
+                                            None,
+                                            username,
+                                            password,
+                                            "SAVE_USERNAME")
+    else:
+        print "Server connection already established."
+except arcpy.ExecuteError:
+    e = sys.exc_info()[1]
+    print(e.args[0])
+    print arcpy.GetMessages() + "\n\n"
+    sys.exit("Failed establishing server connection")
+
+# If Image Service does not exist create Service drafts to publih the service
 # Otherwise add new raster to existing Image Service
 
 # When Image Service does not exist yet create a service definition draft and publish the Service
 if not os.path.exists(workspace_gdb+"\\"+collection_id+ "Service.sd"):
     try:
-        if not arcpy.Exists(out_folder_path+"\\"+out_name):
-            print "Creating Server Connection File"
-            arcpy.mapping.CreateGISServerConnectionFile("PUBLISH_GIS_SERVICES",
-                                                out_folder_path,
-                                                out_name,
-                                                server_url,
-                                                "ARCGIS_SERVER",
-                                                use_arcgis_desktop_staging_folder,
-                                                None,
-                                                username,
-                                                password,
-                                                "SAVE_USERNAME")
         print "Try Creating SD draft"
         if data_store_path not in [i[2] for i in arcpy.ListDataStoreItems(con, 'FOLDER')]:
             # Register folder with ArcGIS Server site --> both the server path(out_folder_path 1.) and client path (out_folder_path 2.) are the same
