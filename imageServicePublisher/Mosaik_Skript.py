@@ -19,6 +19,13 @@
 # product_results ("Connection to Folder containing TIF DataResultProducts") MUST BE DEFINED
 # collection-id  Id of processed Dataproduct
 # ---------------------------------------------------------------------------
+import argparse
+
+parser = argparse.ArgumentParser(description='Crate a mosaic dataset from an EO product image and publish it as an ArcGIS Image Service.')
+parser.add_argument('image', metavar='<IMAGE>', type=str, help='the path to an EO product image that will be processed')
+parser.add_argument('collection', metavar='<COLLECTION>', type=str, help='a collection id relating to the service the EO product image will be published')
+
+args = parser.parse_args()
 
 # Set the necessary product code
 import arceditor
@@ -29,7 +36,7 @@ import sys
 import os
 import fnmatch
 
-# arcpy.env.overwriteOutput = Truea
+# arcpy.env.overwriteOutput = True
 
 # Local variables:
 try:
@@ -50,8 +57,8 @@ except IOError:
     sys.exit('Failed in reading Configurations')
 
 #Script arguments
-product_result = raw_input('Tif_File Path-->')
-col_id = raw_input('CollectionID -->')
+product_result = args.image
+col_id = args.collection
 collection_id = col_id.replace(":", "_")
 
 
