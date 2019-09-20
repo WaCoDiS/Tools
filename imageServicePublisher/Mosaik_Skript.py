@@ -142,6 +142,18 @@ except arcpy.ExecuteError:
     print arcpy.GetMessages() + "\n\n"
     sys.exit("Failed in authoring mosaic datasets and calculating fields")
 
+    
+try:
+    #Analyze Mosaic Dataset
+    print "Analyzing Mosaic Dataset"
+    arcpy.AnalyzeMosaicDataset_management(workspace_gdb+"\\"+collection_id+".gdb\\"+mosaic_product_name)
+    arcpy.AnalyzeMosaicDataset_management(workspace_gdb+"\\"+collection_id+".gdb\\"+'Master' + "_" + collection_id)
+except arcpy.ExecuteError:
+    e = sys.exc_info()[1]
+    print (e.args[0])
+    print arcpy.GetMessages() + "\n\n"
+    sys.exit("Errors in analyzing Mosaic Dataset")
+
 # If Image Service does not Exist create server Connection and Service drafts to publih the service
 # Otherwise add new raster to existing Image Service
 
@@ -173,15 +185,6 @@ if not os.path.exists(workspace_gdb+"\\"+collection_id+ "Service.sd"):
         print arcpy.GetMessages() + "\n\n"
         sys.exit("Failed in creating SD draft")
 
-    try:
-        #Analyze Mosaic Dataset
-        print "Analyzing Mosaic Dataset"
-        arcpy.AnalyzeMosaicDataset_management(workspace_gdb+"\\"+collection_id+".gdb\\"+mosaic_product_name)
-    except arcpy.ExecuteError:
-        e = sys.exc_info()[1]
-        print (e.args[0])
-        print arcpy.GetMessages() + "\n\n"
-        sys.exit("Errors in analyzing Mosaic Dataset")
     # Analyze the service definition draft
     Sddraft = os.path.join(workspace_gdb, collection_id+"Service"+".sddraft")
     Sd = os.path.join(workspace_gdb, collection_id+"Service"+".sd")
