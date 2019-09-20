@@ -11,7 +11,7 @@
 # Following variables must be defined in config.txt
 # 1. Workspace ("Folder for Created FileGDB and Mosaic Datasets") MUST BE DEFINED
 # 2. username and password for ServerConnection MUST BE DEFINED
-# 3. server_url --> Default https://gis.wacodis.demo.52north.org:6443/arcgis/admin
+# 3. server_url
 # 4. name of service Ags File for all Services: Default:wacodisService.ags
 # 5. outdirServerConFolder -->  Path to save server connection file and registered folder for reference Data
 # 
@@ -30,8 +30,6 @@ import os
 import fnmatch
 
 # arcpy.env.overwriteOutput = Truea
-arcpy.CheckProduct('ArcInfo')
-
 
 # Local variables:
 try:
