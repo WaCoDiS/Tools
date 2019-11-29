@@ -22,9 +22,10 @@
 # ---------------------------------------------------------------------------
 import argparse
 
-parser = argparse.ArgumentParser(description='Crate a mosaic dataset from an EO product image and publish it as an ArcGIS Image Service.')
+parser = argparse.ArgumentParser(description='Create a mosaic dataset from an EO product image and publish it as an ArcGIS Image Service.')
 parser.add_argument('image', metavar='<IMAGE>', type=str, help='the path to an EO product image that will be processed')
 parser.add_argument('collection', metavar='<COLLECTION>', type=str, help='a collection id relating to the service the EO product image will be published')
+parser.add_argument('metadata', metavar='<METADATA>', type=str, help='the path to the metadata file of an EO product image that will be processed')
 
 args = parser.parse_args()
 
@@ -36,8 +37,9 @@ import arcpy
 import sys
 import os
 import fnmatch
+import json
 
-# arcpy.env.overwriteOutput = True
+#arcpy.env.overwriteOutput = True
 
 # Local variables:
 try:
@@ -61,6 +63,11 @@ except IOError:
 product_result = args.image
 col_id = args.collection
 collection_id = col_id.replace(":", "_")
+metadata_path = args.metadata
+serviceJSON = open(metadata_path).read()
+json_metadata = json.loads(serviceJSON)
+startTimefield = str(json_metadata['timeFrame']['startTime'])
+endTimefield = str(json_metadata['timeFrame']['endTime'])
 
 
 try:
@@ -68,7 +75,7 @@ try:
     product_name = product_path[len(product_path)-1]
     if arcpy.Exists(workspace_gdb+"\\"+collection_id+".gdb"):
         print "GDB " + collection_id + " exists"
-        # Do nothing
+        #Test_Script.pypython Test_Script.py -h Do nothing
     else:
         arcpy.CreateFileGDB_management(workspace_gdb, collection_id+".gdb")
         # Create Master Mosaic
@@ -79,12 +86,13 @@ try:
                                                  "PARAMETER['False_Northing',0.0],PARAMETER['Central_Meridian',9.0],PARAMETER['Scale_Factor',0.9996],PARAMETER['Latitude_Of_Origin',0.0],"
                                                  "UNIT['Meter',1.0]];-5120900 -9998100 10000;-100000 10000;-100000 10000;0,001;0,001;0,001;IsHighPrecision",pixel_type="8_BIT_UNSIGNED")
         print "Created Master Mosaic for " + collection_id
-        arcpy.AddField_management(workspace_gdb+"\\"+collection_id + '.gdb\\' + 'Master' + "_" + collection_id, "year_quat", "text")
+        arcpy.AddField_management(workspace_gdb+"\\"+collection_id + '.gdb\\' + 'Master' + "_" + collection_id, "startTime", "text")
+        arcpy.AddField_management(workspace_gdb+"\\"+collection_id + '.gdb\\' + 'Master' + "_" + collection_id, "endTime", "text")
         print "Added field"
         arcpy.SetMosaicDatasetProperties_management(
                 workspace_gdb+"\\" + collection_id + '.gdb\\' "Master" + '_' + collection_id,
-                use_time="ENABLED", start_time_field="year_quat", end_time_field="year_quat",
-                time_format="YYYYMMDD", time_interval_units="Months")
+                use_time="ENABLED", start_time_field="startTime", end_time_field="endTime",
+                time_format="YYYY-MM-DD hh:mm:ss.s", time_interval_units="Months")
         print "Mosaic Properties were set"
 except arcpy.ExecuteError:
     e = sys.exc_info()[1]
@@ -92,16 +100,6 @@ except arcpy.ExecuteError:
     print arcpy.GetMessages() + "\n\n"
     sys.exit("Failed in creating GDB and MasterMosaic")
 
-codeblock = """
-def getYearQuat(date,dat):
-    switcher = {
-            "Fruehling": '-03',
-            "Sommer": '-06',
-            "Herbst": '-09',
-            "Winter": '-12',
-            }
-    return date + switcher.get(dat, "")
-    """
 
 try:
     # Create MosaicDataset for every processed Rasterproduct
@@ -136,9 +134,15 @@ try:
         # arcpy.EditRasterFunction_management(workspace_gdb+"\\"+gdb_ws_name + '\\' + "Master" + '_' + gdb_name, "EDIT_MOSAIC_DATASET",
         #                                    "INSERT", "C:/workspace/hillshade.rft.xml", "Rendering Function")
         print "Added Raster to MasterMosaic"
-        arcpy.CalculateField_management(workspace_gdb+"\\"+gdb_ws_name + '\\' + 'Master' + "_" + collection_id, "year_quat",
-                                        "getYearQuat(!NAME!.split('_')[1],!NAME!.split('_')[1])",
-                                        "PYTHON", codeblock)
+
+        cursor = arcpy.UpdateCursor(workspace_gdb+"\\"+gdb_ws_name + '\\' + 'Master' + "_" + collection_id)
+        for row in cursor:
+            row.setValue("startTime", startTimefield)
+            cursor.updateRow(row)
+        cursorET = arcpy.UpdateCursor(workspace_gdb+"\\"+gdb_ws_name + '\\' + 'Master' + "_" + collection_id)
+        for row in cursor:
+            row.setValue("endTime", endTimefield)
+            cursorET.updateRow(row)
         print "Calculated Fields for " + collection_id
                     # To DO mark processed datasets and save to another directory
                     # os.rename(os.path.join(product_results_path,prod_name), os.path.join(processed_prod_path, prod_name))
@@ -148,7 +152,7 @@ except arcpy.ExecuteError:
     print arcpy.GetMessages() + "\n\n"
     sys.exit("Failed in authoring mosaic datasets and calculating fields")
 
-    
+
 try:
     #Analyze Mosaic Dataset
     print "Analyzing Mosaic Dataset"
@@ -194,7 +198,10 @@ if not os.path.exists(workspace_gdb+"\\"+collection_id+ "Service.sd"):
             dsStatus = arcpy.AddDataStoreItem(con, "FOLDER", "Workspace for " + collection_id + 'Service', data_store_path, data_store_path)
             print "Data store : " + str(dsStatus)
         Sddraft = os.path.join(workspace_gdb, collection_id+"Service"+".sddraft")  # Name = Name der Bilddateien/ Ordner bzw. des sddraft
-        arcpy.CreateImageSDDraft(os.path.join(workspace_gdb, collection_id+'.gdb\\Master_'+collection_id), Sddraft, collection_id+"Service", 'ARCGIS_SERVER', None, False, 'WaCoDiS', collection_id, collection_id+",image service, WaCoDiS")
+        # vorletzter Parameter der createImageSdd Draft Funktion muss nachher mit den Metadaten besetzt werden, als description des Services
+        arcpy.CreateImageSDDraft(os.path.join(workspace_gdb, collection_id+'.gdb\\Master_'+collection_id), Sddraft, collection_id+"Service", 'ARCGIS_SERVER', None, False, 'WaCoDiS',
+                                 str(json_metadata['productType']),
+                                 str(json_metadata['productType'])+",image service, WaCoDiS")
     except arcpy.ExecuteError:
         e = sys.exc_info()[1]
         print(e.args[0])
