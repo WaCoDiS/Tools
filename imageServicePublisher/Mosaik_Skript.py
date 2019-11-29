@@ -24,7 +24,7 @@ import argparse
 
 parser = argparse.ArgumentParser(description='Create a mosaic dataset from an EO product image and publish it as an ArcGIS Image Service.')
 parser.add_argument('image', metavar='<IMAGE>', type=str, help='the path to an EO product image that will be processed')
-parser.add_argument('collection', metavar='<COLLECTION>', type=str, help='a collection id relating to the service the EO product image will be published')
+#parser.add_argument('collection', metavar='<COLLECTION>', type=str, help='a collection id relating to the service the EO product image will be published')
 parser.add_argument('metadata', metavar='<METADATA>', type=str, help='the path to the metadata file of an EO product image that will be processed')
 
 args = parser.parse_args()
@@ -61,14 +61,13 @@ except IOError:
 
 #Script arguments
 product_result = args.image
-col_id = args.collection
-collection_id = col_id.replace(":", "_")
 metadata_path = args.metadata
 serviceJSON = open(metadata_path).read()
 json_metadata = json.loads(serviceJSON)
 startTimefield = str(json_metadata['timeFrame']['startTime'])
 endTimefield = str(json_metadata['timeFrame']['endTime'])
-
+col_id = str(json_metadata['serviceDefinition']['productCollection'])
+collection_id = col_id.replace(":", "_")
 
 try:
     product_path = product_result.split('\\')
