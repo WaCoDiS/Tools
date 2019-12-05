@@ -1,0 +1,7 @@
+{
+"jobIdentifier": "randomWPSProcess",
+"outputIdentifiers": ["PRODUCT", "METADATA"],
+"productCollection": "randomProductCollection",
+"dataEnvelopeReferences": ["adsasdasdasdafd", "dasdasdasdasdafs"],
+"processingTool": "de.hsbo.wacodis.forest_vitality_change"
+}
