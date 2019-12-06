@@ -1,6 +1,6 @@
 (install required packages 'pip install -r requirements.txt')
 
-run:    'python amqpPublisher'
+run:    'python amqpPublisher.py'
 
 options:    
             -m path to message file, default: message.txt  
