@@ -3,5 +3,7 @@
 "outputIdentifiers": ["PRODUCT", "METADATA"],
 "productCollection": "randomProductCollection",
 "dataEnvelopeReferences": ["adsasdasdasdafd", "dasdasdasdasdafs"],
-"processingTool": "de.hsbo.wacodis.forest_vitality_change"
+"processingTool": "de.hsbo.wacodis.forest_vitality_change",
+"wacodisJobIdentifier": "550e8400-e29b-11d4-a716-446655440000",
+"executionFinished": "2018-12-11T16:00:00.006Z"
 }

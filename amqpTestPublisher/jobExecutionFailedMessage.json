@@ -1,5 +1,6 @@
 {
 "jobIdentifier": "randomWPSProcess",
 "reason": "something went horribly wrong",
-"created": "2018-12-11T12:03:26.006Z"
+"created": "2018-12-11T12:03:26.006Z",
+"wacodisJobIdentifier": "550e8400-e29b-11d4-a716-446655440000"
 }
