@@ -23,5 +23,6 @@
       "maximumCloudCoverage": 20.0,
       "satellite": "sentinel-2"
     }
-  ]
+  ],
+  "productCollection": "landcoverCollection" 
 }
