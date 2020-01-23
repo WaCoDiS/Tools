@@ -91,7 +91,7 @@ try:
         arcpy.SetMosaicDatasetProperties_management(
                 workspace_gdb+"\\" + collection_id + '.gdb\\' "Master" + '_' + collection_id,
                 use_time="ENABLED", start_time_field="startTime", end_time_field="endTime",
-                time_format="YYYY-MM-DD hh:mm:ss.s", time_interval_units="Months")
+                time_format="YYYY-MM-DD hh:mm:ss.s",time_interval=1.0, time_interval_units="Days")
         print "Mosaic Properties were set"
 except arcpy.ExecuteError:
     e = sys.exc_info()[1]
@@ -130,18 +130,24 @@ try:
                                                            "UPDATE_CELL_SIZES", "UPDATE_BOUNDARY", "NO_OVERVIEWS", "0", "1500", "#", "", "#", "NO_SUBFOLDERS", "EXCLUDE_DUPLICATES",
                                                            "NO_PYRAMIDS", "CALCULATE_STATISTICS", "BUILD_THUMBNAILS", "", "NO_FORCE_SPATIAL_REFERENCE", "ESTIMATE_STATISTICS", "")
         # Add Rendering Function to Raster Dataset probably depending wether a rtf file has been build or not
-        # arcpy.EditRasterFunction_management(workspace_gdb+"\\"+gdb_ws_name + '\\' + "Master" + '_' + gdb_name, "EDIT_MOSAIC_DATASET",
-        #                                    "INSERT", "C:/workspace/hillshade.rft.xml", "Rendering Function")
+        # arcpy.EditRasterFunction_management(workspace_gdb+"\\"+gdb_ws_name + '\\' + "Master" + '_' + collection_id, "EDIT_MOSAIC_DATASET",
+        #                                    "INSERT", "C:/WaCoDiS/raster_functions/Oberflaechentemperatur.rft.xml", "Rendering Function")
         print "Added Raster to MasterMosaic"
 
-        cursor = arcpy.UpdateCursor(workspace_gdb+"\\"+gdb_ws_name + '\\' + 'Master' + "_" + collection_id)
+        cursor = arcpy.da.UpdateCursor(workspace_gdb+"\\"+gdb_ws_name + '\\' + 'Master' + "_" + collection_id, ['NAME','startTime'])
         for row in cursor:
-            row.setValue("startTime", startTimefield)
+            if(row[0] == mosaic_product_name):
+                row[1] = startTimefield
             cursor.updateRow(row)
-        cursorET = arcpy.UpdateCursor(workspace_gdb+"\\"+gdb_ws_name + '\\' + 'Master' + "_" + collection_id)
-        for row in cursor:
-            row.setValue("endTime", endTimefield)
+        del row
+        del cursor
+        cursorET = arcpy.da.UpdateCursor(workspace_gdb+"\\"+gdb_ws_name + '\\' + 'Master' + "_" + collection_id, ['NAME','endTime'])
+        for row in cursorET:
+            if(row[0] == mosaic_product_name):
+                row[1] = endTimefield
             cursorET.updateRow(row)
+        del row
+        del cursorET
         print "Calculated Fields for " + collection_id
                     # To DO mark processed datasets and save to another directory
                     # os.rename(os.path.join(product_results_path,prod_name), os.path.join(processed_prod_path, prod_name))
