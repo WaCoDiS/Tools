@@ -4,9 +4,11 @@
   "description": "This Job defines a land cover classification by remote sensing images for the area of the Wuppertalsperre.",
   "useCase": "land-cover-classification",
   "created": "2018-12-11T12:03:26.006Z",
-  "lastFinishedExecution": "2018-12-11T12:03:26.006Z",
   "execution": {
-    "pattern": "0 0 1 * *"
+	"event": {
+		"eventType": "SingleJobExecutionEvent",
+		"startAt": "2018-12-11T12:05:00.000Z"
+	}
   },
   "temporalCoverage": {
     "duration": "PT1M",
