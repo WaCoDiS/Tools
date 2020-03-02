@@ -1,0 +1,6 @@
+workspace=C:\WaCoDiS\DataProducts
+username=username
+password=password
+serverUrl=arcgis.server.url/arcgis/admin
+out_name=wacodisService.ags
+outdirServerCon=C:\WaCoDiS
