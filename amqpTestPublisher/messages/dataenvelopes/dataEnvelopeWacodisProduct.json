@@ -1,0 +1,27 @@
+{
+  "sourceType": "WacodisProductDataEnvelope",
+  "areaOfInterest": {
+    "extent": [
+      6.931388,
+      50.985491,
+      7.607060,
+      51.319054
+    ]
+  },
+  "timeFrame": {
+    "startTime": "2018-12-11T12:03:26.006Z",
+    "endTime": "2018-12-12T12:03:26.006Z"
+  },
+  "created": "2018-12-11T12:03:26.006Z",
+  "modified": "2018-12-11T12:03:26.006Z",
+  "productType": "ndvi",
+  "dataEnvelopeReferences": ["851956cb-0975-407c-bada-a08247f13c5e"],
+  "dataEnvelopeServiceEndpoint": "http://localhost:8080/dataAccessApi",
+  "process": "ndvi",
+  "serviceDefinition": {
+    "backendType": "ArcGISImageServerBackend",
+    "productCollection": "WaCoDiS/EO:WACODIS:DAT:NDVI",
+    "baseUrl": "arcgis.server.url/arcgis/admin",
+    "serviceTypes": "ImageServer"
+  }
+}

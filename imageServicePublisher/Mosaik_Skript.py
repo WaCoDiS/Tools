@@ -3,7 +3,6 @@
 # Mosaik_Skript.py
 # Created on: 2019-07-09 10:47:30.00000
 #
-# Usage: Mosaik_Skript <File_GDB_Name> 
 # Description:
 # A connection to ArcGIS Server must be established in the Catalog window of ArcMap
 # before running this script
@@ -17,8 +16,8 @@
 # 
 # Following variables are passed as command line arguments:
 # IMAGE ("Absolute path to TIF DataResultProducts") MUST BE DEFINED
-# COLLECTION Id of processed Dataproduct
-# Usage: Mosaik_Skript.py [-h] <IMAGE> <COLLECTION>
+# METADATA Absolute path to metadata file
+# Usage: Mosaik_Skript.py [-h] <IMAGE> <METADATA>
 # ---------------------------------------------------------------------------
 import argparse
 

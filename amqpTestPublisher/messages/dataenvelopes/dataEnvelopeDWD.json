@@ -1,0 +1,20 @@
+{
+  "sourceType": "DwdDataEnvelope",
+  "areaOfInterest": {
+    "extent": [
+      6.931388,
+      50.985491,
+      7.607060,
+      51.319054
+    ]
+  },
+  "timeFrame": {
+    "startTime": "2020-01-01T01:03:26.006Z",
+    "endTime": "2020-02-01T01:03:26.006Z"
+  },
+  "created": "2020-01-01T01:03:26.006Z",
+  "modified": "2020-02-01T01:03:26.006Z",
+  "serviceUrl": "https://cdc.dwd.de:443/geoserver/CDC/VGSL_FX_MN003/wfs",
+  "layerName": "VGSL_FX_MN003",
+  "parameter": "Windspitze"
+}
