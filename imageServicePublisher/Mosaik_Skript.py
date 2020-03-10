@@ -30,7 +30,7 @@ parser.add_argument('metadata', metavar='<METADATA>', type=str, help='the path t
 args = parser.parse_args()
 
 # Set the necessary product code
-import arceditor
+import arcinfo
 
 # Import modules
 import arcpy
@@ -40,6 +40,11 @@ import fnmatch
 import json
 
 #arcpy.env.overwriteOutput = True
+
+pixel_type_dict = {
+	"EO:WACODIS:DAT:FOREST_VITALITY_CHANGE": "32_BIT_FLOAT",
+	"EO:WACODIS:DAT:INTRA_LAND_COVER_CLASSIFICATION": "8_BIT_UNSIGNED "
+	}
 
 # Local variables:
 try:
@@ -66,8 +71,13 @@ serviceJSON = open(metadata_path).read()
 json_metadata = json.loads(serviceJSON)
 startTimefield = str(json_metadata['timeFrame']['startTime'])
 endTimefield = str(json_metadata['timeFrame']['endTime'])
-col_id = str(json_metadata['serviceDefinition']['productCollection'])
+col_id = str(json_metadata['serviceDefinition']['productCollection']).split("/")[1]
 collection_id = col_id.replace(":", "_")
+
+if col_id in pixel_type_dict:
+    product_pixel_type = pixel_type_dict[col_id]
+else:
+    product_pixel_type = "32_BIT_FLOAT"
 
 try:
     product_path = product_result.split('\\')
@@ -83,7 +93,7 @@ try:
                                                  "PROJCS['ETRS_1989_UTM_Zone_32N',GEOGCS['GCS_ETRS_1989',DATUM['D_ETRS_1989',SPHEROID['GRS_1980',6378137.0,298.257222101]],"
                                                  "PRIMEM['Greenwich',0.0],UNIT['Degree',0.0174532925199433]],PROJECTION['Transverse_Mercator'],PARAMETER['False_Easting',500000.0],"
                                                  "PARAMETER['False_Northing',0.0],PARAMETER['Central_Meridian',9.0],PARAMETER['Scale_Factor',0.9996],PARAMETER['Latitude_Of_Origin',0.0],"
-                                                 "UNIT['Meter',1.0]];-5120900 -9998100 10000;-100000 10000;-100000 10000;0,001;0,001;0,001;IsHighPrecision",pixel_type="8_BIT_UNSIGNED")
+                                                 "UNIT['Meter',1.0]];-5120900 -9998100 10000;-100000 10000;-100000 10000;0,001;0,001;0,001;IsHighPrecision",pixel_type=product_pixel_type)
         print "Created Master Mosaic for " + collection_id
         arcpy.AddField_management(workspace_gdb+"\\"+collection_id + '.gdb\\' + 'Master' + "_" + collection_id, "startTime", "text")
         arcpy.AddField_management(workspace_gdb+"\\"+collection_id + '.gdb\\' + 'Master' + "_" + collection_id, "endTime", "text")
@@ -117,7 +127,7 @@ try:
                                                                                                               "PARAMETER['Central_Meridian',9.0],"
                                                                                                               "PARAMETER['Scale_Factor',0.9996],PARAMETER['Latitude_Of_Origin',0.0],"
                                                                                                               "UNIT['Meter',1.0]];-5120900 -9998100 10000;-100000 10000;-100000 10000;0,001;0,001;0,001;"
-                                                                                                              "IsHighPrecision",pixel_type="8_BIT_UNSIGNED")
+                                                                                                              "IsHighPrecision",pixel_type=product_pixel_type)
         print "Created Mosaic for " + gdb_ws_name + " with " + mosaic_product_name
         # Raster zum Mosaik hinzufuegen
         arcpy.AddRastersToMosaicDataset_management(workspace_gdb+"\\"+gdb_ws_name + '\\' + mosaic_product_name, "Raster Dataset", product_result,
