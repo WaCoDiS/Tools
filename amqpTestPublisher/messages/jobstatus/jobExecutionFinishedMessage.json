@@ -1,0 +1,11 @@
+{      
+  "processingTool": "de.hsbo.wacodis.forest_vitality_change",
+  "wacodisJobIdentifier": "61d324be-27ff-46c7-9c07-bb22ef30661b",
+  "executionFinished": "2020-03-10T16:00:00.006Z",
+  "productDescription": {
+    "wpsJobIdentifier": "81ac933f-0edd-4bb3-81b4-789fc319b0ba",
+    "outputIdentifiers": ["PRODUCT", "METADATA"],
+    "productCollection": "forest_vitality_change",
+    "dataEnvelopeReferences": ["adsasdasdasdafd", "dasdasdasdasdafs"]
+  }
+}

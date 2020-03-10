@@ -1,0 +1,34 @@
+{
+  "id": "851956cb-0975-407c-bada-a08247f13c5e",
+  "name": "land-cover-classification_wuppertalsperre4",
+  "description": "This Job defines a land cover classification by remote sensing images for the area of the Wuppertalsperre.",
+  "useCase": "land-cover-classification",
+  "created": "2018-12-11T12:03:26.006Z",
+  "lastFinishedExecution": "2018-12-11T12:03:26.006Z",
+  "status": null,
+  "execution": {
+    "pattern": "*/1 * * * *",
+    "event": null
+  },
+  "temporalCoverage": {
+    "duration": "P1M",
+    "previousExecution": false
+  },
+  "areaOfInterest": {
+    "extent": [
+      6.931388,
+      50.985491,
+      7.607060,
+      51.319054
+    ]
+  },
+  "processingTool": "land-cover-classification",
+  "inputs": [
+    {
+      "sourceType": "DwdSubsetDefinition",
+      "identifier": "opticalImage",
+      "serviceUrl": "https://cdc.dwd.de:443/geoserver/CDC/wfs",
+      "layerName": "TT_TU_MN009"
+    }
+  ]
+}

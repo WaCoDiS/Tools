@@ -1,9 +1,0 @@
-{
-"jobIdentifier": "randomWPSProcess",
-"outputIdentifiers": ["PRODUCT", "METADATA"],
-"productCollection": "randomProductCollection",
-"dataEnvelopeReferences": ["adsasdasdasdafd", "dasdasdasdasdafs"],
-"processingTool": "de.hsbo.wacodis.forest_vitality_change",
-"wacodisJobIdentifier": "61d324be-27ff-46c7-9c07-bb22ef30661b",
-"executionFinished": "2018-12-31T16:00:00.006Z"
-}
