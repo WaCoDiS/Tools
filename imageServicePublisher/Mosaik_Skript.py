@@ -42,7 +42,11 @@ import json
 
 pixel_type_dict = {
 	"EO:WACODIS:DAT:FOREST_VITALITY_CHANGE": "32_BIT_FLOAT",
-	"EO:WACODIS:DAT:INTRA_LAND_COVER_CLASSIFICATION": "8_BIT_UNSIGNED "
+	"EO:WACODIS:DAT:INTRA_LAND_COVER_CLASSIFICATION": "8_BIT_UNSIGNED",
+    "EO:WACODIS:DAT:SEALING_FACTOR": "32_BIT_FLOAT",
+    "EO:WACODIS:DAT:VEGETATION_DENSITY_LAI": "32_BIT_FLOAT",
+    "EO:WACODIS:DAT:NDVI": "32_BIT_FLOAT",
+    "EO:WACODIS:DAT:S2A_RAW": "32_BIT_FLOAT"
 	}
 
 # Local variables:
@@ -76,12 +80,14 @@ collection_id = col_id.replace(":", "_")
 if col_id in pixel_type_dict:
     product_pixel_type = pixel_type_dict[col_id]
 else:
+    print "No pixel type found for product {}".format(product_result)
     product_pixel_type = "32_BIT_FLOAT"
+print "Set pixel type to {} for product {}".format(product_pixel_type, product_result)
 
 try:
     product_path = product_result.split('\\')
     product_name = product_path[len(product_path)-1]
-    if arcpy.Exists(workspace_gdb+"\\"+collection_id+".gdb"):
+    if arcpy.Exists(workspace_gdb + "\\"+collection_id+".gdb"):
         print "GDB " + collection_id + " exists"
         #Test_Script.pypython Test_Script.py -h Do nothing
     else:
