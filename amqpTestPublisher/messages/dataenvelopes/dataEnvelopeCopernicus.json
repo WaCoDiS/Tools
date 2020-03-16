@@ -1,0 +1,22 @@
+{
+  "sourceType": "CopernicusDataEnvelope",
+  "areaOfInterest": {
+    "extent": [
+      6.931388,
+      50.985491,
+      7.607060,
+      51.319054
+    ]
+  },
+  "timeFrame": {
+    "startTime": "2020-02-27T16:22:00.004Z",
+    "endTime": "2020-02-27T16:22:00.004Z"
+  },
+  "created": "2020-02-28T16:22:00.000Z",
+  "modified": "2020-02-28T16:22:00.000Z",
+  "identifier": "ExwI1HABo1Q-ty5XJIX7",
+  "datasetId": "7dc927a8-e5ba-4dd0-8625-2aaa653e1656",
+  "satellite": "sentinel-2",
+  "cloudCoverage": 15.0,
+  "portal": "Sentinel-Hub"
+}
