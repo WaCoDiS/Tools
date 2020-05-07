@@ -22,6 +22,6 @@
     "backendType": "ArcGISImageServerBackend",
     "productCollection": "WaCoDiS/EO:WACODIS:DAT:NDVI",
     "baseUrl": "arcgis.server.url/arcgis/admin",
-    "serviceTypes": "ImageServer"
+    "serviceTypes": ["ImageServer"]
   }
 }
